@@ -1,0 +1,71 @@
+preservation:
+  source_is_authoritative: true
+  allow_redesign: false
+  allow_copy_changes: false
+  allow_face_regeneration: false
+  allow_subject_replacement: false
+  allow_major_recomposition: false
+  allow_logo_changes: false
+  max_unapproved_pixel_change_ratio: 0.0
+
+severity:
+  critical: 0.90
+  high: 0.70
+  moderate: 0.45
+  low: 0.20
+
+audit:
+  faces:
+    enabled: true
+    flag_identity_drift: true
+    flag_anatomical_anomalies: true
+    flag_duplicate_features: true
+  artifacts:
+    enabled: true
+    flag_hands: true
+    flag_textures: true
+    flag_geometry: true
+    flag_edges_and_seams: true
+    flag_repeated_patterns: true
+  color:
+    enabled: true
+    palette_k: 12
+    flag_outliers: true
+    flag_saturation_drift: true
+    flag_luminance_drift: true
+  typography:
+    enabled: true
+    inspect_family_consistency: true
+    inspect_weight_consistency: true
+    inspect_size_hierarchy: true
+    inspect_line_height: true
+    inspect_tracking: true
+    inspect_alignment: true
+  layout:
+    enabled: true
+    inspect_margins: true
+    inspect_spacing: true
+    inspect_alignment: true
+    inspect_density: true
+    inspect_competing_focal_points: true
+  communication:
+    enabled: true
+    inspect_thumbnail_readability: true
+    inspect_headline_prominence: true
+    inspect_cta_visibility: true
+    inspect_information_density: true
+
+repair:
+  mode: recommend_only
+  require_region_lock: true
+  require_before_after_diff: true
+  reject_unapproved_regions: true
+  permitted:
+    - restrained_exposure
+    - white_balance
+    - noise_reduction
+    - sharpening
+    - color_normalization
+    - artifact_cleanup
+    - typography_normalization
+    - spacing_cleanup
