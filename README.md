@@ -1,12 +1,15 @@
-# Administrative Case Evidence Audit System
+# Administrative Case Audit System
 
-Purpose: independent, source-controlled review of a Philippine local-government administrative case record.
+Independent, adversarial review workflow for Philippine local-government administrative case records.
 
-NON-LEGAL-ADVICE CONTROL:
-This repository is an analysis and records-audit workspace. AI outputs are not legal advice, evidence, findings of guilt, or a substitute for qualified counsel or the competent disciplining authority.
+This repository is for prompts, schemas, checklists, and synthetic examples only.
+Do not store confidential case records here unless the repository is explicitly secured and the retention/privacy requirements have been reviewed.
 
-CORE PRINCIPLE:
-No AI may convert an assumption into a fact, a search result into an authority, or an interpretation into a legal conclusion without source support.
-
-EVIDENCE RULE:
-Original records are preserved separately and never rewritten. AI-generated analyses are derivative work only.
+Principles:
+- Original evidence is never altered.
+- AI output is analysis, not evidence.
+- Facts require documentary support.
+- Material legal propositions require current primary authority.
+- Jurisdiction and respondent status are checked before procedure.
+- Conflicts are preserved, not silently resolved.
+- High-risk uncertainty triggers HUMAN REVIEW REQUIRED.
