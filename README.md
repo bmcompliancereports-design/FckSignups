@@ -9,28 +9,48 @@ A curated collection of open-source tools you can use instantly in your browser.
 
 ---
 
-## What is this?
+## Brochure Visual Auditor
 
-NoSignups is a React + TypeScript project. If you want to run it locally, simply clone the repo, install the depedencies, and run the server.
+A preservation-first visual QA tool specification for auditing institutional brochures without redesigning them.
 
-Here's a command that would do all the previous steps in one go:
-```bash
-git clone https://github.com/BraveOPotato/FckSignups.git && \
-cd FckSignups && \
-npm install && \
-npm run dev
-```
+### Audits
+- facial distortion and visual identity-risk artifacts
+- AI/generative image artifacts
+- color palette consistency
+- typography consistency and hierarchy
+- layout density, spacing, alignment, and clutter
+- readability and communication hierarchy
 
----
+### Preservation rules
+The existing artwork is authoritative.
 
-## Philosophy
+The auditor must **never**:
+- redesign the composition
+- rewrite copy
+- replace people or photographs
+- regenerate faces
+- alter identity, pose, or clothing
+- move major structural elements
+- replace logos
+- introduce a different visual concept
 
-| We believe | We reject |
-|------------|-----------|
-| Tools should work immediately | Forced registration walls |
-| Your data belongs to you | Data harvesting and tracking |
-| Open source is the default | Proprietary black boxes |
-| Simple is better | Bloat and unnecessary complexity |
+It may only recommend or perform explicitly authorized restoration/refinement operations such as restrained color correction, artifact cleanup, typography normalization, and spacing cleanup.
+
+### Output
+Every issue contains:
+`ID | Category | Severity | Region | Confidence | Evidence | Impact | Minimal Correction | Preservation Risk`
+
+Global scores:
+- Visual Quality
+- Communication
+- Artifact Risk
+- Typography Consistency
+- Color Consistency
+- Preservation Compliance
+
+See:
+- `docs/brochure-audit-spec.md`
+- `config/brochure_rules.yaml`
 
 ---
 
@@ -54,8 +74,6 @@ npm run dev
 
 ## Categories
 
-The default categories are:
-
 | ID | Name | Icon |
 |----|------|------|
 | `all` | All | ◈ |
@@ -68,7 +86,6 @@ The default categories are:
 | `data` | Data & Analytics | 📊 |
 | `media` | Media | 🎬 |
 | `education` | Education | 🎓 |
-
 
 ---
 
@@ -85,16 +102,6 @@ The default categories are:
 ## Discussions
 
 If you'd like to voice your opinion, we have a community on reddit [r/fucksignups](https://www.reddit.com/r/fucksignups/).
-
-Don't be afraid to critique. 
-
----
-
-## Featured 
-
-> Why are some tools featured? 
-
-It's simple. We're at 200+ tools, and a lot of them are similar. To break the homogeneity, I flag the unique ones to the top. This is biased since "what is uniqueness?" and I simply define that as a tool that is different from the other ones. Whether it's outstanding quality, or simply a very unique idea. 
 
 ---
 
