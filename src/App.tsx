@@ -9,6 +9,7 @@ import { MODAL_CONFIGS } from "./constants/ModalConfigs";
 import { ModalProvider } from "./hooks/useModal";
 import { ReportProvider } from "./hooks/useReport";
 import { useTools } from "./hooks/useTools";
+import type { SortOption } from "./types";
 
 export default function App() {
   const {
@@ -20,10 +21,12 @@ export default function App() {
     categories,
     loadStatus,
     errorMessage,
-    searchQuery,
+    query,
     activeCategory,
-    setSearchQuery,
-    setActiveCategory,
+    sortBy,
+    onCategoryChange,
+    onSearchChange,
+    onSortChange,
   } = useTools();
 
   const activeCat = categories.find((c) => c.id === activeCategory);
@@ -35,17 +38,18 @@ export default function App() {
         <Header
           toolCount={tools.length}
           categoryCount={Math.max(0, categories.length - 1)}
-          setSearchQuery={setSearchQuery}
         />
 
         <ToolFilters
           categories={categories}
           activeCategory={activeCategory}
-          searchQuery={searchQuery}
+          searchQuery={query}
           allTools={tools}
           filteredCount={filteredTools.length}
-          onCategoryChange={setActiveCategory}
-          onSearchChange={setSearchQuery}
+          sortBy={sortBy as SortOption}
+          onCategoryChange={onCategoryChange}
+          onSearchChange={onSearchChange}
+          onSortChange={onSortChange}
         />
         {activeCat && activeCat.id !== "all" && (
           <div className="section-divider">
@@ -61,9 +65,10 @@ export default function App() {
             categories={categories}
             loadStatus={loadStatus}
             errorMessage={errorMessage}
-            searchQuery={searchQuery}
+            searchQuery={query}
             activeCategory={activeCategory}
-            setSearchQuery={setSearchQuery}
+            sortBy={sortBy as SortOption}
+            onSearchChange={onSearchChange}
           />
 
           <ReportFloatingWidget />

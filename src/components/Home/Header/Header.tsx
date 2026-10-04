@@ -7,14 +7,9 @@ import s from "./Header.module.css";
 interface HeaderProps {
   toolCount: number;
   categoryCount: number;
-  setSearchQuery: (query: string) => void;
 }
 
-export function Header({
-  toolCount,
-  categoryCount,
-  setSearchQuery,
-}: HeaderProps) {
+export function Header({ toolCount, categoryCount }: HeaderProps) {
   const { showModalWithID } = useModal();
   const [starsCount, setStarsCount] = useState("????");
 
@@ -41,7 +36,7 @@ export function Header({
         </div>
         <div className={s.headerGrid}>
           <div className={s.brandBlock}>
-            <h1 className={s.brandTitle} onClick={() => setSearchQuery("")}>
+            <h1 className={s.brandTitle}>
               <span className={`${s.fck} ${s.glitch}`} data-text="NO">
                 NO
               </span>

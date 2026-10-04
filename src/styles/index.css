@@ -270,7 +270,7 @@ body::after {
 
 /* God bless AI for this selector */
 label:has(+ .modal-input[required])::after {
-	content: "*";
+	content: "*" / "";
 	margin-left: 5px;
 	color: var(--accent);
 }

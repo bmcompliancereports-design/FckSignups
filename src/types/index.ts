@@ -2,6 +2,8 @@ export type ToolSection = "featured" | "editors-pick" | "meets-criteria";
 
 export type ToolFlag = "new" | "abandoned";
 
+export type SortOption = "stars" | "newest" | "oldest";
+
 export interface Tool {
   id: string;
   name: string;

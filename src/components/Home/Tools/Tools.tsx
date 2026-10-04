@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import type { ToolSections } from "../../../hooks/useTools";
-import type { Category, LoadStatus, Tool } from "../../../types";
+import type {
+  Category,
+  LoadStatus,
+  SortOption,
+  Tool,
+} from "../../../types";
 import ShowMoreButton from "../../Shared/Buttons/ShowMoreButton/ShowMoreButton";
 import { ToolCard } from "./ToolCard/ToolCard";
 import s from "./Tools.module.css";
@@ -14,7 +19,8 @@ interface ToolsProps {
   errorMessage: string;
   searchQuery: string;
   activeCategory: string;
-  setSearchQuery: (query: string) => void;
+  sortBy: SortOption;
+  onSearchChange: (args: { query: string; isInput?: boolean }) => void;
 }
 
 const sectionVariantClass = {
@@ -32,13 +38,14 @@ export function Tools({
   errorMessage,
   searchQuery,
   activeCategory,
-  setSearchQuery,
+  sortBy,
+  onSearchChange
 }: ToolsProps) {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     setShowMore(false);
-  }, [searchQuery, activeCategory]);
+  }, [searchQuery, activeCategory, sortBy]);
 
   if (loadStatus === "loading") {
     return (
@@ -85,7 +92,8 @@ export function Tools({
             tools={featured}
             categories={categories}
             searchKeywords={searchKeywords}
-            setSearchQuery={setSearchQuery}
+            onSearchChange={onSearchChange}
+            sortBy={sortBy}
           />
         )}
 
@@ -96,7 +104,8 @@ export function Tools({
             tools={editorsPicks}
             categories={categories}
             searchKeywords={searchKeywords}
-            setSearchQuery={setSearchQuery}
+            onSearchChange={onSearchChange}
+            sortBy={sortBy}
           />
         )}
 
@@ -108,7 +117,8 @@ export function Tools({
               tools={meetsCriteria}
               categories={categories}
               searchKeywords={searchKeywords}
-              setSearchQuery={setSearchQuery}
+              onSearchChange={onSearchChange}
+              sortBy={sortBy}
             />
           ) : (
             <ShowMoreButton
@@ -127,7 +137,8 @@ interface ToolsSectionProps {
   tools: Tool[];
   categories: Category[];
   searchKeywords: string[];
-  setSearchQuery: (query: string) => void;
+  sortBy: SortOption;
+  onSearchChange: (args: { query: string; isInput?: boolean }) => void;
 }
 
 function ToolsSection({
@@ -136,20 +147,36 @@ function ToolsSection({
   tools,
   categories,
   searchKeywords,
-  setSearchQuery,
+  sortBy,
+  onSearchChange
 }: ToolsSectionProps) {
+  const sortedTools = [...tools].sort((left, right) => {
+    if (sortBy === "stars") return 0;
+
+    const leftTime = left.addedAt ? Date.parse(left.addedAt) : Number.NaN;
+    const rightTime = right.addedAt ? Date.parse(right.addedAt) : Number.NaN;
+    const leftHasDate = Number.isFinite(leftTime);
+    const rightHasDate = Number.isFinite(rightTime);
+
+    if (!leftHasDate && !rightHasDate) return 0;
+    if (!leftHasDate) return 1;
+    if (!rightHasDate) return -1;
+
+    return sortBy === "newest" ? rightTime - leftTime : leftTime - rightTime;
+  });
+
   return (
     <section className={`${s.toolSection} ${sectionVariantClass[variant]}`}>
       <div className={s.sectionDivider}>{label}</div>
 
       <div className={s.grid}>
-        {tools.map((tool) => (
+        {sortedTools.map((tool) => (
           <ToolCard
             key={tool.id}
             tool={tool}
             category={categories.find((c) => c.id === tool.category)}
             searchKeywords={searchKeywords}
-            setSearchQuery={setSearchQuery}
+            onSearchChange={onSearchChange}
           />
         ))}
       </div>

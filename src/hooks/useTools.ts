@@ -1,10 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
+  DEFAULT_CATEGORY_VALUE,
+  DEFAULT_SORT_VALUE,
   DEV_JSON_URL,
   FALLBACK_DATA,
   PROD_JSON_URL,
 } from "../constants/fallbackData";
-import type { Category, LoadStatus, Tool, ToolsData } from "../types";
+import type {
+  Category,
+  LoadStatus,
+  SortOption,
+  Tool,
+  ToolsData,
+} from "../types";
+import { DEBOUNCE_SEARCH_FIELD_MS } from "../constants/time";
 
 export interface ToolSections {
   featured: Tool[];
@@ -21,10 +31,12 @@ interface UseToolsReturn {
   categories: Category[];
   loadStatus: LoadStatus;
   errorMessage: string;
-  searchQuery: string;
+  query: string;
   activeCategory: string;
-  setSearchQuery: (q: string) => void;
-  setActiveCategory: (id: string) => void;
+  sortBy: string;
+  onCategoryChange: (id: string) => void;
+  onSearchChange: (args: { query: string; isInput?: boolean }) => void;
+  onSortChange: (option: SortOption) => void;
 }
 
 function sectionize(tools: Tool[]): ToolSections {
@@ -42,8 +54,15 @@ export function useTools(): UseToolsReturn {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
   const [errorMessage, setErrorMessage] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("all");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeCategory = searchParams.get("category") || DEFAULT_CATEGORY_VALUE;
+  const searchQuery = searchParams.get("q") || "";
+  const sortBy: SortOption =
+    (searchParams.get("sort") as SortOption | null) || DEFAULT_SORT_VALUE;
+
+  const [query, setQuery] = useState(searchQuery);
+  const debounceId: React.RefObject<null | number> = useRef(null);
 
   useEffect(() => {
     async function load() {
@@ -118,6 +137,56 @@ export function useTools(): UseToolsReturn {
     [filteredTools],
   );
 
+  function onCategoryChange(id: string) {
+    const params = new URLSearchParams(searchParams);
+
+    id === DEFAULT_CATEGORY_VALUE
+      ? params.delete("category")
+      : params.set("category", id);
+
+    setSearchParams(params);
+  }
+
+  function onSearchChange({
+    query,
+    isInput = false,
+  }: {
+    query: string;
+    isInput?: boolean;
+  }) {
+    if (isInput) {
+      if (debounceId.current) {
+        clearTimeout(debounceId.current);
+      }
+
+      setQuery(query);
+      debounceId.current = setTimeout(
+        () => updateUrlQuery(query),
+        DEBOUNCE_SEARCH_FIELD_MS,
+      );
+      return;
+    }
+
+    setQuery(query);
+    updateUrlQuery(query);
+  }
+
+  function updateUrlQuery(query: string) {
+    const params = new URLSearchParams(searchParams);
+    query === "" ? params.delete("q") : params.set("q", query);
+    setSearchParams(params);
+  }
+
+  function onSortChange(option: SortOption) {
+    const params = new URLSearchParams(searchParams);
+
+    option === DEFAULT_SORT_VALUE
+      ? params.delete("sort")
+      : params.set("sort", option);
+
+    setSearchParams(params);
+  }
+
   return {
     tools: allTools,
     filteredTools,
@@ -127,10 +196,12 @@ export function useTools(): UseToolsReturn {
     categories,
     loadStatus,
     errorMessage,
-    searchQuery,
+    query,
     activeCategory,
-    setSearchQuery,
-    setActiveCategory,
+    sortBy,
+    onCategoryChange,
+    onSearchChange,
+    onSortChange,
   };
 }
 
